@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 984ae3f0eaddb22fd6bfc08deaa6eedfe11ebaa262de28b7f2ed96ac0c010bfe
+-- hash: 0153a49f86fcbe8daade30eebe9d7b2d70c008dce37e552abab68e0b8a66c311
 
 name:           haskell-first-principles
 version:        0.1.0.0
@@ -13,7 +13,6 @@ author:         Author name here
 maintainer:     example@example.com
 copyright:      2019 Author name here
 license:        BSD3
-license-file:   LICENSE
 build-type:     Simple
 cabal-version:  >= 1.10
 extra-source-files:
@@ -27,6 +26,7 @@ source-repository head
 library
   exposed-modules:
       Lib
+      Monoidx.E597
   other-modules:
       Paths_haskell_first_principles
   hs-source-dirs:
