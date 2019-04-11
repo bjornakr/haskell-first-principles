@@ -1,8 +1,10 @@
--- This file has been generated from package.yaml by hpack version 0.28.2.
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.31.0.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 0153a49f86fcbe8daade30eebe9d7b2d70c008dce37e552abab68e0b8a66c311
+-- hash: 5760f2b66a9f15518dd3ac6e3374a71e5f4001f3a10c76110fbd918238e71d2c
 
 name:           haskell-first-principles
 version:        0.1.0.0
@@ -14,9 +16,7 @@ maintainer:     example@example.com
 copyright:      2019 Author name here
 license:        BSD3
 build-type:     Simple
-cabal-version:  >= 1.10
 extra-source-files:
-    ChangeLog.md
     README.md
 
 source-repository head
@@ -26,13 +26,16 @@ source-repository head
 library
   exposed-modules:
       Lib
+      Monoidx.E1_613
       Monoidx.E597
   other-modules:
       Paths_haskell_first_principles
   hs-source-dirs:
       src
   build-depends:
-      base >=4.7 && <5
+      QuickCheck
+    , base >=4.7 && <5
+    , hspec
   default-language: Haskell2010
 
 executable haskell-first-principles-exe
@@ -43,19 +46,23 @@ executable haskell-first-principles-exe
       app
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      base >=4.7 && <5
+      QuickCheck
+    , base >=4.7 && <5
     , haskell-first-principles
+    , hspec
   default-language: Haskell2010
 
 test-suite haskell-first-principles-test
   type: exitcode-stdio-1.0
-  main-is: Spec.hs
+  main-is: Main.hs
   other-modules:
       Paths_haskell_first_principles
   hs-source-dirs:
       test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      base >=4.7 && <5
+      QuickCheck
+    , base >=4.7 && <5
     , haskell-first-principles
+    , hspec
   default-language: Haskell2010
