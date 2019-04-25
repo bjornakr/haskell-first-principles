@@ -148,6 +148,15 @@ compi = do
   print $ success 1 <> success 2
   print $ failure "woot" <> success 2
 
+
+-- Mem
+newtype Mem s a = Mem { runMem :: s -> (a,s) }
+  instance Monoid a => Monoid (Mem s a) where
+  mempty = undefined
+  mappend = undefined
+
+
+
 main :: IO ()
 main = do
   testTrivial
