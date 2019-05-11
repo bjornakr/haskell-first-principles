@@ -115,14 +115,14 @@ testBoolConj = do
 newtype Combine a b = Combine { unCombine :: (a -> b) }
 
 instance Semigroup b => Semigroup (Combine a b) where
-  (Combine f1) <> (Combine f2) = Combine (\x -> (f1 x) <> (f2 x)) 
+  (Combine f1) <> (Combine f2) = Combine (\x -> f1 x <> f2 x) 
 
 instance Monoid b => Monoid (Combine a b) where
   mempty = Combine (\_ -> mempty)
 
 
 -- Comp 
-newtype Comp a = Comp { unComp :: (a -> a)}
+newtype Comp a = Comp { unComp :: (a -> a) }
 
 instance Semigroup (Comp a) where
   (Comp f1) <> (Comp f2) = Comp $ \x -> f1 (f2 x) -- TODO: Verifiser
@@ -151,11 +151,28 @@ compi = do
 
 -- Mem
 newtype Mem s a = Mem { runMem :: s -> (a,s) }
-  instance Monoid a => Monoid (Mem s a) where
-  mempty = undefined
-  mappend = undefined
 
+instance Semigroup a => Semigroup (Mem s a) where
+  (Mem f1) <> (Mem f2) = Mem $ \s ->
+    case (f1 s) of
+      (a1, s1) -> case (f2 s1) of
+        (a2, s2) -> (a1 <> a2, s2)
 
+instance Monoid a => Monoid (Mem s a) where
+  mempty = Mem (\s -> (mempty, s))
+
+testMem :: IO ()
+testMem = do
+  let 
+    f' = Mem $ \s -> ("hi", s + 1)
+    rmzero = runMem mempty 0
+    rmleft = runMem (f' <> mempty) 0
+    rmright = runMem (mempty <> f') 0
+  print $ rmleft
+  print $ rmright
+  print $ (rmzero :: (String, Int))
+  print $ rmleft == runMem f' 0
+  print $ rmright == runMem f' 0
 
 main :: IO ()
 main = do

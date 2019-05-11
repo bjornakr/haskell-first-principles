@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 5760f2b66a9f15518dd3ac6e3374a71e5f4001f3a10c76110fbd918238e71d2c
+-- hash: 59fa0b6abb74e9eb534965bd2204685ec7992f9d326701b5688ee84f403bdbe6
 
 name:           haskell-first-principles
 version:        0.1.0.0
@@ -28,6 +28,7 @@ library
       Lib
       Monoidx.E1_613
       Monoidx.E597
+      Test
   other-modules:
       Paths_haskell_first_principles
   hs-source-dirs:
