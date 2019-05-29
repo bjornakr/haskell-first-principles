@@ -62,7 +62,6 @@ instance Functor (K a) where
 
 
 
-
 -- 3.
 newtype Flip f a b = Flip (f b a) deriving (Eq, Show)
 --newtype Kf a b = Kf a
@@ -92,6 +91,7 @@ instance Functor f => Functor (LiftItOut f) where
 testLiftItOut = fmap (+1) (LiftItOut (Just 1)) == LiftItOut (Just 2)
 
 
+
 -- ★6★
 -- DaWrappa :: f a -> g a -> Parappa f g a
 data Parappa f g a = DaWrappa (f a) (g a) deriving (Eq, Show)
@@ -102,6 +102,7 @@ instance (Functor f, Functor g) => Functor (Parappa f g) where
 testDaWrappa = fmap (+1) (DaWrappa (Just 1) [2]) == DaWrappa (Just 2) [3]
 
 
+
 -- ★7★ --
 data IgnoreOne f g a b = IgnoringSomething (f a) (g b)
 
@@ -109,11 +110,14 @@ instance Functor g => Functor (IgnoreOne f g a) where
   fmap h (IgnoringSomething fa gb) = IgnoringSomething fa (fmap h gb)
 
 
+
 -- ★8★ --
 data Notorious g o a t = Notorious (g o) (g a) (g t)
 
 instance Functor g => Functor (Notorious g o a) where
   fmap f (Notorious go ga gt) = Notorious (go) (ga) (fmap f gt)
+
+
 
 -- ★9★ --
 data List a =
@@ -131,3 +135,41 @@ testList =
   in
     fmap (*10) list == Cons 10 (Cons 20 (Cons 30 Nil))
 
+
+
+-- ★10★ --
+-- A tree of goats forms a Goat-Lord, fearsome poly-creature.
+data GoatLord a =
+    NoGoat
+  | OneGoat a
+  | MoreGoats (GoatLord a) (GoatLord a) (GoatLord a) -- A VERITABLE HYDRA OF GOATS
+  deriving (Eq, Show)
+
+instance Functor (GoatLord) where
+  fmap _ NoGoat = NoGoat
+  fmap f (OneGoat a) = OneGoat (f a)
+  fmap f (MoreGoats ga1 ga2 ga3) = MoreGoats (fmap f ga1) (fmap f ga2) (fmap f ga3)
+
+testGoatLord =
+  let
+    gs = MoreGoats NoGoat (OneGoat 3) (OneGoat 4)
+  in
+    fmap (*10) gs == MoreGoats NoGoat (OneGoat 30) (OneGoat 40)
+
+
+
+-- ★11★ --
+data TalkToMe a =
+    Halt
+  | Print String a
+  | Read (String -> a)
+
+-- instance Eq a => Eq (TalkToMe a) where
+--   Halt == Halt = True
+--   Print s1 a1 == Print s2 a2 = s1 == s2 && a1 == a2
+--   Read f == Read g = f == g   <-- IMPOSSIBLE
+
+instance Functor (TalkToMe) where
+  fmap _ Halt = Halt
+  fmap f (Print s a) = Print s (f a)
+  fmap f (Read g) = Read (f . g)  -- == Read (\s -> (f . g) s)
